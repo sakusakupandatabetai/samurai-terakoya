@@ -1,0 +1,16 @@
+PS C:\侍\Git課題\Git_challenge> git init
+Initialized empty Git repository in C:/侍/Git課題/Git_challenge/.git/
+PS C:\侍\Git課題\Git_challenge> echo "hello,world!" >> hello_world.txt
+PS C:\侍\Git課題\Git_challenge> git add hello_world.txt
+PS C:\侍\Git課題\Git_challenge> git commit -m "hello_world.txtを追加"
+[main (root-commit) ab064a9] hello_world.txtを追加
+ 1 file changed, 1 insertion(+)
+ create mode 100644 hello_world.txt
+PS C:\侍\Git課題\Git_challenge> echo "こんにちは、世界！" >> hello_world.txt
+PS C:\侍\Git課題\Git_challenge> git add hello_world.txt
+PS C:\侍\Git課題\Git_challenge> git commit -m "日本語訳を追記"
+[main d40061a] 日本語訳を追記
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+PS C:\侍\Git課題\Git_challenge> git log --oneline
+d40061a (HEAD -> main) 日本語訳を追記
+ab064a9 hello_world.txtを追加
