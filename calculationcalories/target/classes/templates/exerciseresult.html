@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>計算結果 - カロリー管理アプリ</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+<main>
+  <h1>計算結果</h1>
+
+  <div class="result">
+    <p><strong th:text="${exerciseName}">ウォーキング</strong> を実施</p>
+    <p>消費カロリー: <strong th:text="${#numbers.formatDecimal(calories, 1, 1)}">300.0</strong> kcal</p>
+    <p style="color: green;">記録が保存されました！</p>
+  </div>
+
+  <a th:href="@{/exercise/input}" class="button">別の運動を入力</a>
+  <a th:href="@{/exercise/history}" class="button" style="margin-left: 10px;">過去の記録を見る</a>
+  <a th:href="@{/}" class="button" style="margin-left: 10px;">ホームに戻る</a>
+</main>
+
+</body>
+</html>

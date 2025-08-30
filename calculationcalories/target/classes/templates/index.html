@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>ホーム - カロリー管理アプリ</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+<header>
+  <div class="title">カロリー管理アプリ</div>
+  <nav>
+    <a th:href="@{/exercise/input}">カロリー計算</a>
+    <a th:href="@{/exercise/history}">過去の記録</a>
+    <a th:href="@{/user/profile}">マイプロフィール</a>
+  </nav>
+  
+  <div class="profile">
+  <h3>消費カロリー目安</h3>
+  <p>ユーザー名: <span th:text="${user.name}">未設定</span></p>
+  <p>1日の消費カロリー: <span th:text="${user.dailyCalories}">0</span> kcal</p>
+  <a th:href="@{/user/profile}" class="btn btn-secondary">プロフィール編集</a>
+</div>
+</header>
+
+<main>
+  <h1>本日の消費カロリー合計</h1>
+
+  <div class="result" th:text="'合計: ' + ${totalCalories} + ' kcal'">合計: 0 kcal</div>
+
+  
+</main>
+
+</body>
+</html>

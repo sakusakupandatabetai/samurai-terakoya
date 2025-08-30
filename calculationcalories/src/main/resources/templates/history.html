@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <title>過去の記録</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; }
+        th { background-color: #f0f0f0; }
+        .btn-delete {
+            background-color: #dc3545; color: white;
+            border: none; padding: 5px 10px; border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-delete:hover { background-color: #c82333; }
+        .chart-container { max-width: 700px; margin: 30px auto; }
+    </style>
+</head>
+<body>
+<h1>過去の記録</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>日付</th>
+            <th>運動項目</th>
+            <th>消費カロリー(kcal)</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="record : ${records}">
+            <td th:text="${record.date}"></td>
+            <td th:text="${record.exerciseName}"></td>
+            <!-- カロリーはシンプルに表示 -->
+            <td th:text="${record.calories}"></td>
+            <td>
+                <form th:action="@{/exercise/history/deleteOne}" method="post" onsubmit="return confirm('この記録を削除しますか？');">
+                    <input type="hidden" name="id" th:value="${record.id}" />
+                    <button type="submit" class="btn-delete">削除</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(records)}">
+            <td colspan="4">記録がありません</td>
+        </tr>
+    </tbody>
+</table>
+
+<form th:action="@{/exercise/history/deleteAll}" method="post" onsubmit="return confirm('すべての記録を削除しますか？');">
+    <button type="submit" class="btn-delete">すべて削除</button>
+</form>
+
+<div class="chart-container" th:if="${!#lists.isEmpty(records)}">
+    <h3>日別消費カロリー（棒グラフ）</h3>
+    <canvas id="barChart"></canvas>
+</div>
+
+<div class="chart-container" th:if="${!#lists.isEmpty(records)}">
+    <h3>種目別カロリー割合（円グラフ）</h3>
+    <canvas id="pieChart"></canvas>
+</div>
+
+<a href="/" style="display:inline-block;margin-top:20px;">ホームに戻る</a>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    // サーバーから渡されるラベルと値をJavaScriptの配列として受け取る
+    let barLabels = /*[[${barLabels}]]*/ [];
+    let barValues = /*[[${barValues}]]*/ [];
+
+    let pieLabels = /*[[${pieLabels}]]*/ [];
+    let pieValues = /*[[${pieValues}]]*/ [];
+
+    // 文字列やnullなどの不正値対策で確実に数値化（NaNは0に）
+    barValues = barValues.map(x => Number(x) || 0);
+    pieValues = pieValues.map(x => Number(x) || 0);
+
+    // 棒グラフの描画
+    if (barLabels.length > 0) {
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [{
+                    label: '消費カロリー (kcal)',
+                    data: barValues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+
+    // 円グラフの描画
+    if (pieLabels.length > 0) {
+        const ctxPie = document.getElementById('pieChart').getContext('2d');
+        new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    label: '運動種目割合',
+                    data: pieValues,
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56',
+                        '#4BC0C0', '#9966FF', '#FF9F40'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+/*]]>*/
+</script>
+
+</body>
+</html>

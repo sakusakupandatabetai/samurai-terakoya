@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>運動入力 - カロリー管理アプリ</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+
+
+<main>
+  <h1>運動カロリー計算</h1>
+
+  <form th:action="@{/exercise}" method="post">
+    <label for="exerciseId">運動名:</label>
+    <select id="exerciseId" name="exerciseId" required>
+      <option value="">選択してください</option>
+      <option th:each="ex : ${exercises}" th:value="${ex.id}" th:text="${ex.name}"></option>
+    </select>
+
+    <label for="duration">時間（時間）:</label>
+    <input type="number" id="duration" name="duration" step="0.1" required />
+
+    <label for="weight">体重（kg）:</label>
+    <input type="number" id="weight" name="weight" step="0.1" required />
+
+    <button type="submit">計算</button>
+  </form>
+
+  <a th:href="@{/}" class="button" style="margin-top: 20px; display: inline-block;">ホームに戻る</a>
+</main>
+
+</body>
+</html>
